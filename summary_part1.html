@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT441 สรุปสอบ Part 1</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;line-height:1.6;font-size:1.3em}
+h1{text-align:center;color:#00d4ff;font-size:2.8em;margin-bottom:10px;text-shadow:0 0 20px rgba(0,212,255,0.5)}
+.subtitle{text-align:center;color:#888;margin-bottom:30px;font-size:1.2em}
+.topic{background:#1a1a2e;border-radius:12px;padding:20px;margin-bottom:20px;border-left:4px solid #00d4ff}
+.topic h2{color:#00d4ff;margin-bottom:12px;font-size:1.7em}
+.topic h3{color:#ff6b9d;margin:10px 0 6px;font-size:1.4em}
+.topic ul{padding-left:20px}
+.topic li{margin-bottom:4px;font-size:1.2em}
+.topic li strong{color:#ffd700}
+.highlight{background:#2a2a4a;padding:8px 12px;border-radius:6px;margin:8px 0;font-family:monospace;font-size:1em;color:#7fff7f;overflow-x:auto}
+.tag{display:inline-block;background:#ff6b9d;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.9em;margin:2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
+.nav{text-align:center;margin:20px 0}
+.nav a{color:#00d4ff;text-decoration:none;font-size:1.2em}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:1.05em}
+th{background:#2a2a4a;color:#00d4ff;padding:8px;text-align:left}
+td{padding:6px 8px;border-bottom:1px solid #333}
+</style>
+</head>
+<body>
+<h1>📚 IT441 Security Summary</h1>
+<p class="subtitle">Part 1: Application Security | Data Protection | Firmware & Host Security | Network Security</p>
+<p class="nav"><a href="summary_part2.html">➡️ ไปยัง Part 2: IR/DF, Pentest, Security Tools</a></p>
+
+<!-- ===== 1. APPLICATION SECURITY ===== -->
+<div class="topic" id="appsec">
+<h2>1. Application Security 🛡️</h2>
+
+<h3>1.1 Software Vulnerabilities</h3>
+<ul>
+<li><strong>Buffer Overflow</strong> — เขียนข้อมูลเกินขนาด buffer → รัน arbitrary code ได้</li>
+<li><strong>Integer Overflow</strong> — ค่าเกิน range (เช่น 255+1=0 ใน unsigned char) → crash/exploit</li>
+<li><strong>Null Pointer Dereferencing</strong> — อ่าน/เขียน memory location ที่เป็น null → crash</li>
+<li><strong>Race Condition</strong> — ผลลัพธ์ขึ้นกับ timing ของ events; <strong>TOCTTOU</strong> = Time of Check/Time of Use</li>
+<li><strong>Memory Leak</strong> — allocate memory แต่ไม่ release → host หมด memory</li>
+<li><strong>Resource Exhaustion</strong> — CPU, memory, disk, network ถูกใช้จนหมด</li>
+<li><strong>DLL Injection</strong> — บังคับ process โหลด malicious DLL</li>
+<li><strong>Pass the Hash</strong> — ใช้ NTLM hash จาก memory โดยไม่ต้อง crack password → lateral movement</li>
+</ul>
+
+<h3>1.2 Web Application Attacks</h3>
+<ul>
+<li><strong>URL Analysis</strong> — HTTP methods: GET, POST, PUT, HEAD; Percent encoding</li>
+<li><strong>API Attacks</strong> — ต้องใช้ HTTPS เสมอ; จุดอ่อน: secrets mgmt, input validation, error info leak</li>
+<li><strong>Replay Attack</strong> — resubmit authorization token/cookie</li>
+<li><strong>Session Hijacking</strong> — ขโมย cookie; <strong>CSRF/XSRF</strong> = ส่ง URL ไปเว็บที่ user login อยู่</li>
+<li><strong>Clickjacking</strong> — ซ้อน invisible layer ดักจับ click</li>
+<li><strong>SSL Strip</strong> — exploit HTTP→HTTPS redirect; แก้ด้วย <strong>HSTS</strong></li>
+<li><strong>XSS (Cross-Site Scripting)</strong>:
+  <ul>
+    <li><strong>Reflected (Non-persistent)</strong> — script อยู่ใน link</li>
+    <li><strong>Stored (Persistent)</strong> — script ถูกเก็บใน database</li>
+    <li><strong>DOM-based</strong> — client-side script</li>
+  </ul>
+</li>
+<li><strong>SQL Injection</strong> — ใส่ SQL ผ่าน input เช่น <code>' or 1=1--#</code></li>
+<li><strong>Directory Traversal</strong> — <code>../../etc/config</code> เข้าถึงไฟล์นอก root</li>
+<li><strong>Command Injection</strong> — ทำให้ server รัน OS shell command</li>
+<li><strong>SSRF</strong> — ทำให้ server ส่ง request ไปยัง internal service</li>
+</ul>
+
+<h3>1.3 Secure Coding Practices</h3>
+<ul>
+<li><strong>OWASP</strong> — แนวทาง security best practice</li>
+<li><strong>Input Validation</strong> — ตรวจสอบทุก input จาก user/API</li>
+<li><strong>Output Encoding</strong> — strip illegal chars, normalize</li>
+<li><strong>Client-side vs Server-side Validation</strong> — ใช้ทั้งคู่; client ไม่น่าเชื่อถือ 100%</li>
+<li><strong>Secure Cookies</strong> — ใช้ Secure, HttpOnly, SameSite attributes</li>
+<li><strong>Response Headers</strong> — HSTS, CSP, Cache-Control</li>
+<li><strong>Error Handling</strong> — SEH ป้องกัน info leak; ไม่แสดง default error messages</li>
+<li><strong>Static Analysis</strong> — วิเคราะห์ source code ด้วย automated tool</li>
+<li><strong>Dynamic Analysis</strong> — ทดสอบ runtime; fuzzing & stress testing</li>
+</ul>
+</div>
+
+<!-- ===== 2. DATA PROTECTION ===== -->
+<div class="topic" id="dataprot">
+<h2>2. Data Privacy & Protection 🔒</h2>
+
+<h3>2.1 Privacy vs Security</h3>
+<ul>
+<li><strong>Security</strong> = CIA (Confidentiality, Integrity, Availability)</li>
+<li><strong>Privacy</strong> = ปกป้อง personal data ตาม regulation + สิทธิ data subjects</li>
+</ul>
+
+<h3>2.2 Data Types</h3>
+<table>
+<tr><th>ประเภท</th><th>คำอธิบาย</th></tr>
+<tr><td><strong>PII</strong></td><td>Personally Identifiable Information</td></tr>
+<tr><td><strong>PHI</strong></td><td>Protected Health Information</td></tr>
+<tr><td><strong>PIFI</strong></td><td>Personally Identifiable Financial Info</td></tr>
+<tr><td><strong>IP</strong></td><td>Intellectual Property</td></tr>
+</table>
+
+<h3>2.3 Data Roles</h3>
+<ul>
+<li><strong>Data Owner</strong> — รับผิดชอบสูงสุด</li>
+<li><strong>Data Steward</strong> — ดูแล data quality</li>
+<li><strong>Data Custodian</strong> — จัดการ IT systems</li>
+<li><strong>DPO</strong> — ดูแล PII; <strong>Data Controller</strong> vs <strong>Data Processor</strong></li>
+</ul>
+
+<h3>2.4 Data Classifications</h3>
+<ul>
+<li><strong>Public</strong> → <strong>Confidential</strong> → <strong>Critical</strong> (Top Secret)</li>
+<li><strong>Proprietary</strong> = ข้อมูลที่มีมูลค่าเชิงพาณิชย์</li>
+<li><strong>Private/Personal</strong> = ระบุตัวบุคคลได้</li>
+<li><strong>Sensitive</strong> = ข้อมูลพิเศษ เช่น เชื้อชาติ ศาสนา</li>
+</ul>
+
+<h3>2.5 GDPR & PDPA</h3>
+<ul>
+<li><strong>GDPR</strong> — กฎหมายคุ้มครองข้อมูลของ EU; สิทธิ data subjects, privacy notices, impact assessments</li>
+<li><strong>PDPA (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ.2562)</strong> — กฎหมายไทย</li>
+<li><strong>Data Sovereignty</strong> — กฎหมายขึ้นกับ jurisdiction ที่เก็บข้อมูล</li>
+<li><strong>Breach</strong> → ผลกระทบ: reputation damage, identity theft, fines → ต้อง notify</li>
+</ul>
+
+<h3>2.6 Data Protection Controls</h3>
+<table>
+<tr><th>State</th><th>Protection</th></tr>
+<tr><td><strong>At Rest</strong></td><td>Encryption (FDE, DB, file-level) + ACLs</td></tr>
+<tr><td><strong>In Transit</strong></td><td>TLS, IPSec</td></tr>
+<tr><td><strong>In Use</strong></td><td>อยู่ใน RAM/CPU; Trusted Execution Environments</td></tr>
+</table>
+
+<h3>2.7 DLP & Privacy Tech</h3>
+<ul>
+<li><strong>DLP</strong> — scan files, ป้องกัน unauthorized copy; ใช้ policy server + endpoint/network agents</li>
+<li>Remediation: <strong>Alert → Block → Quarantine → Tombstone</strong></li>
+<li><strong>Data Minimization</strong> — เก็บเท่าที่จำเป็น</li>
+<li><strong>Deidentification</strong> — ลบ personal info จาก dataset</li>
+<li><strong>Anonymization</strong> — ลบถาวร ไม่สามารถย้อนกลับ</li>
+<li><strong>Pseudo-anonymization</strong> — ย้อนกลับได้ถ้ามี separate data source</li>
+<li><strong>Data Masking</strong> — redaction (irreversible)</li>
+<li><strong>Tokenization</strong> — แทนค่าด้วย random token, เก็บใน vault (reversible)</li>
+</ul>
+</div>
+
+<!-- ===== 3. FIRMWARE & HOST SECURITY ===== -->
+<div class="topic" id="hostsec">
+<h2>3. Firmware & Host Security 🖥️</h2>
+
+<h3>3.1 Hardware Root of Trust</h3>
+<ul>
+<li><strong>TPM (Trusted Platform Module)</strong> — chip บน motherboard เก็บ crypto keys; endorsement key</li>
+<li><strong>HSM (Hardware Security Module)</strong> — อุปกรณ์จัดการ digital keys, encryption/decryption</li>
+<li>ทั้ง TPM/HSM มี unique private key ที่ burned ลง hardware</li>
+</ul>
+
+<h3>3.2 Boot Integrity</h3>
+<ul>
+<li><strong>UEFI</strong> แทน BIOS แบบเก่า</li>
+<li><strong>Secure Boot</strong> — validate digital signatures ก่อนรัน boot loader/OS</li>
+<li><strong>Measured Boot</strong> — ใช้ TPM วัด hash ของ boot files แต่ละ stage</li>
+<li><strong>Remote Attestation</strong> — ส่ง boot info ไป verify ที่ remote system</li>
+</ul>
+
+<h3>3.3 Drive & USB Security</h3>
+<ul>
+<li><strong>FDE (Full Disk Encryption)</strong> — เข้ารหัสทั้ง disk; key เก็บใน TPM</li>
+<li><strong>SED (Self-Encrypting Drive)</strong> — DEK/MEK + AK/KEK; Opal spec</li>
+<li><strong>BadUSB</strong> — malicious firmware ใน USB; ใช้ <strong>Sheep Dip</strong> (sandbox) ทดสอบ</li>
+</ul>
+
+<h3>3.4 Supply Chain & Vendor</h3>
+<ul>
+<li>ตรวจสอบ backdoor ใน hardware/firmware จาก supply chain</li>
+<li><strong>Vendor Assessment</strong>: viability, support, lock-in/lock-out, source code escrow</li>
+<li><strong>EOL</strong> = ไม่ขายแล้ว; <strong>EOSL</strong> = ไม่ support แล้ว</li>
+<li>Agreements: <strong>MOU, BPA, NDA, SLA</strong></li>
+</ul>
+
+<h3>3.5 Endpoint Hardening</h3>
+<ul>
+<li>ลด attack surface: ปิด interfaces/services/ports ที่ไม่ใช้</li>
+<li><strong>Configuration Baseline</strong> — template + GPOs + registry settings</li>
+<li><strong>Patch Management</strong> — update OS/app/firmware เป็นประจำ</li>
+<li><strong>Change Management</strong> — document + review ก่อน implement</li>
+</ul>
+
+<h3>3.6 Endpoint Protection</h3>
+<ul>
+<li><strong>AV/Anti-malware</strong> — signature-based detection</li>
+<li><strong>HIDS/HIPS</strong> — file integrity monitoring + log/network scanning</li>
+<li><strong>EPP</strong> — รวม AV + HIDS + firewall + DLP ไว้ด้วยกัน</li>
+<li><strong>EDR</strong> — real-time visibility + behavior analytics + ML</li>
+<li><strong>Whitelisting</strong> — อนุญาตเฉพาะ app ที่อยู่ใน list</li>
+<li><strong>Blacklisting</strong> — บล็อก app ที่อยู่ใน list</li>
+</ul>
+
+<h3>3.7 Virtualization & Cloud</h3>
+<ul>
+<li><strong>Type I Hypervisor</strong> (Bare Metal) vs <strong>Type II</strong> (Host-based)</li>
+<li><strong>Container</strong> — OS-level isolation (Docker); ไม่สามารถรัน OS ต่างกัน</li>
+<li><strong>VDI</strong> — Virtual Desktop Infrastructure; ใช้ thin client</li>
+<li><strong>VM Escape</strong> — code หลุดจาก VM ไป interact กับ hypervisor</li>
+<li>Cloud: <strong>IaaS</strong> (infra) → <strong>PaaS</strong> (platform) → <strong>SaaS</strong> (software)</li>
+<li><strong>Shared Responsibility Model</strong> — แบ่งความรับผิดชอบระหว่าง CSP กับ customer</li>
+<li><strong>MSSP</strong> — Managed Security Services Provider</li>
+</ul>
+</div>
+
+<!-- ===== 4. NETWORK SECURITY ===== -->
+<div class="topic" id="netsec">
+<h2>4. Network Security 🌐</h2>
+
+<h3>4.1 Network Devices & ACLs</h3>
+<ul>
+<li><strong>Switch Security</strong> — DHCP snooping, DAI, port security, MAC filtering</li>
+<li><strong>ACL</strong> — rules กำหนด allow/deny; จบด้วย <strong>implicit deny</strong></li>
+<li><strong>Router ACL</strong> — filter ตาม IP, port, protocol</li>
+</ul>
+
+<h3>4.2 Firewalls</h3>
+<table>
+<tr><th>Type</th><th>Detail</th></tr>
+<tr><td><strong>Stateless</strong></td><td>ใช้ ACL; Permission+Protocol+Src+Dst+Port</td></tr>
+<tr><td><strong>Stateful</strong></td><td>ตรวจ state ของ session (established TCP)</td></tr>
+<tr><td><strong>NGFW</strong></td><td>Application-aware + user-based + IPS + cloud inspection</td></tr>
+<tr><td><strong>UTM</strong></td><td>รวม firewall+AV+IPS+spam+DLP+VPN</td></tr>
+<tr><td><strong>WAF</strong></td><td>ป้องกัน web application โดยเฉพาะ</td></tr>
+</table>
+
+<h3>4.3 Proxy, IDS/IPS</h3>
+<ul>
+<li><strong>Forward Proxy</strong> — เปิด connection แทน internal client; <strong>Reverse Proxy</strong> — แทน external client</li>
+<li><strong>IDS</strong> — passive detection + logging/alerting</li>
+<li><strong>IPS</strong> — active response: reset session, apply filter, throttle bandwidth</li>
+<li><strong>Packet Sniffer</strong> — เช่น Wireshark; capture & analyze network traffic</li>
+</ul>
+
+<h3>4.4 Network Design & Zones</h3>
+<ul>
+<li><strong>Network Segmentation</strong> — physical isolation, VLANs</li>
+<li>Zones: <strong>Intranet</strong> (private), <strong>Extranet</strong>, <strong>Internet</strong> (public)</li>
+<li><strong>DMZ</strong> — แยก hosts ที่ต้อง Internet-facing (DNS, FTP, Mail, Web servers)</li>
+<li>Topologies: <strong>Screened Subnet</strong> (dual firewall) vs <strong>Triple-Homed</strong> (single firewall)</li>
+<li><strong>Honeypot/Honeynet</strong> — ล่อ attacker เพื่อสังเกต methodology</li>
+</ul>
+
+<h3>4.5 VPN & Remote Access</h3>
+<ul>
+<li><strong>TLS Tunneling</strong> — ผ่าน NAT ได้; SSTP ใช้ port 443</li>
+<li><strong>IPSec</strong>: <strong>AH</strong> (auth+integrity, protocol 51) + <strong>ESP</strong> (encryption, protocol 50)</li>
+<li><strong>Transport Mode</strong> — host-to-host (private network)</li>
+<li><strong>Tunnel Mode</strong> — gateway-to-gateway (เข้ารหัสทั้งหมด); ใช้ IKE port 500</li>
+<li><strong>Split Tunnel</strong> — encrypt เฉพาะ traffic ไป private network</li>
+<li><strong>Full Tunnel</strong> — encrypt ทุก traffic</li>
+<li><strong>NAC</strong> — posture assessment ตรวจ health ของ endpoint ก่อนอนุญาตเข้า network</li>
+</ul>
+
+<h3>4.6 Network Attacks</h3>
+<ul>
+<li><strong>DoS</strong> — จาก 1 system; <strong>DDoS</strong> — จากหลาย systems</li>
+<li><strong>SYN Flood</strong> — disrupt TCP 3-way handshake (ไม่ส่ง ACK กลับ)</li>
+<li><strong>DRDoS</strong> — spoof victim IP → servers ส่ง SYN/ACK ไปหา victim</li>
+<li><strong>Spoofing</strong> — ปลอมแปลง MAC/IP; <strong>MitM</strong> attack</li>
+<li><strong>ARP Poisoning</strong> — ปลอม ARP reply → on-path attack</li>
+<li><strong>DNS Poisoning</strong> — corrupt DNS data → redirect traffic</li>
+<li><strong>Pharming</strong> — redirect web traffic; <strong>Domain Hijacking</strong> — เปลี่ยน registration</li>
+<li><strong>Replay Attack</strong> — capture data แล้วส่งซ้ำ เพื่อ impersonate</li>
+</ul>
+</div>
+
+<p class="nav" style="margin-top:30px"><a href="summary_part2.html">➡️ ไปยัง Part 2: IR/DF, Pentest, Security Tools</a></p>
+</body>
+</html>
